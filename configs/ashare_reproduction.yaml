@@ -1,0 +1,45 @@
+experiment_name: ashare_qfr
+seed: 7
+device: auto
+
+data:
+  kind: ashare
+  dataset_path: dataset/ashare_merged.csv
+  date_column: date
+  asset_column: sample_code
+  start_date: 2022-01-01
+  end_date: 2025-12-31
+  n_assets: 400
+  lookback: 20
+  forecast_horizon: 5
+  train_ratio: 0.7
+  valid_ratio: 0.15
+
+tokens:
+  features: [open, high, low, close, volume, roe, roa, gross_margin, net_margin, debt_to_assets, ocf_per_share]
+  constants: [-1.0, -0.01, 0.01, 1.0, 5.0]
+  windows: [5, 10, 20]
+  max_length: 32
+
+model:
+  embedding_dim: 64
+  hidden_dim: 128
+  num_heads: 4
+
+training:
+  episodes: 800
+  batch_size: 8
+  learning_rate: 0.001
+  entropy_weight: 0.001
+  grad_clip: 0.1
+  log_every: 10
+
+reward:
+  lambda_penalty: 0.02
+  alpha_delay: 10
+  eta: 0.005
+  delta: 0.15
+
+pool:
+  max_factors: 16
+  ridge: 0.001
